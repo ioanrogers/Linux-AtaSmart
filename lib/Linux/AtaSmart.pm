@@ -5,6 +5,7 @@ package Linux::AtaSmart;
 use v5.14;
 use Moo;
 use File::Spec;
+use Carp;
 
 my $typemap;
 
@@ -29,7 +30,7 @@ sub _build__disk {
     my $self = shift;
     my $disk = _c_disk_open($self->device);
     if (!$disk) {
-        die "Failed to open disk: $!";
+        confess "Failed to open disk: $!";
     }
     $self->_disk($disk);
 }
@@ -38,7 +39,7 @@ sub smart_is_available {
     my $self  = shift;
     my $avail = _c_smart_is_available($self->_disk);
     if ($avail == -1) {
-        die "Failed to query whether SMART is available: $!";
+        confess "Failed to query whether SMART is available: $!";
     }
     return $avail;
 }
@@ -47,7 +48,7 @@ sub get_size {
     my $self  = shift;
     my $bytes = _c_get_size($self->_disk);
     if ($bytes == -1) {
-        die "Failed to retrieve disk size: $!";
+        confess "Failed to retrieve disk size: $!";
     }
     return $bytes;
 }
@@ -56,7 +57,7 @@ sub check_sleep_mode {
     my $self  = shift;
     my $awake = _c_check_sleep_mode($self->_disk);
     if ($awake == -1) {
-        die "Failed to check disk power status: $!";
+        confess "Failed to check disk power status: $!";
     }
     return $awake;
 }
@@ -70,7 +71,7 @@ sub smart_status {
     my $self = shift;
     my $good = _c_smart_status($self->_disk);
     if ($good == -1) {
-        die "Failed to query SMART status: $!";
+        confess "Failed to query SMART status: $!";
     }
     return $good;
 }
@@ -84,7 +85,7 @@ sub get_temperature {
 
     my $mkelvin = _c_get_temperature($self->_disk);
     if ($mkelvin == -1) {
-        die "Failed to retrieve temperature: $!";
+        confess "Failed to retrieve temperature: $!";
     }
 
     # millikelvin to celsius
@@ -101,7 +102,7 @@ sub get_bad {
 
     my $bad_sectors = _c_get_bad($self->_disk);
     if ($bad_sectors == -1) {
-        die "Failed to retrieve bad sector count: $!";
+        confess "Failed to retrieve bad sector count: $!";
     }
     return $bad_sectors;
 }
@@ -110,11 +111,11 @@ sub _read_data {
     my $self = shift;
 
     if (_c_read_data($self->_disk) < 0) {
-        die "Failed to read SMART data: $!";
+        confess "Failed to read SMART data: $!";
     }
 
     if (_c_parse_data($self->_disk) < 0) {
-        die "Failed to parse SMART data: $!";
+        confess "Failed to parse SMART data: $!";
     }
 
     $self->_smart_data(1);

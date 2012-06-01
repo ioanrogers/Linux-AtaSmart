@@ -5,7 +5,7 @@ use Linux::AtaSmart;
 use Try::Tiny;
 use Number::Format qw/format_bytes/;
 
-my $disk_dev = '/dev/' . shift;
+my $disk_dev = shift || die "You must supply a disk, e.g /dev/sda";
 
 say "Open [$disk_dev]";
 
@@ -30,7 +30,7 @@ say 'Status: ' . ($atasmart->smart_status     ? 'GOOD' : 'BAD');
 
 say "Bad Sectors: " . $atasmart->get_bad;
 
-say "Temperature °K: " . $atasmart->get_temperature;
+say "Temperature °C: " . $atasmart->get_temperature;
 
 say "#### DUMP ####";
 $atasmart->dump;

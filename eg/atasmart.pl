@@ -1,4 +1,4 @@
- #!/usr/bin/env perl
+#!/usr/bin/env perl
 
 use v5.14;
 use strict;
@@ -16,7 +16,8 @@ my $atasmart;
 
 try {
     $atasmart = Linux::AtaSmart->new(device => $disk_dev);
-} catch {
+}
+catch {
     say "BOOM: $_";
     exit;
 };
@@ -38,7 +39,7 @@ say "Temperature °C: " . $atasmart->get_temperature;
 my $status = $atasmart->get_overall;
 
 if ($status != OVERALL_GOOD) {
-    say "STATUS NOT GOOD!"
+    say "STATUS NOT GOOD!";
 }
 
 say "Power Cycles: " . $atasmart->get_power_cycle;

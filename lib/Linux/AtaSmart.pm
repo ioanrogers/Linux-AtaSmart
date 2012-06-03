@@ -19,7 +19,7 @@ sub _build__disk {
     if (!$disk) {
         confess "Failed to open disk: $!";
     }
-    
+
     return $disk;
 }
 
@@ -111,11 +111,11 @@ sub get_overall {
 
 sub get_power_cycle {
     my $self = shift;
-    
+
     if (!$self->_smart_data) {
         $self->_read_data;
     }
-    
+
     my $cycles = _c_get_power_cycle($self->_disk);
     if ($cycles == -1) {
         confess "Failed to retrieve number of power cycles: $!";
@@ -129,13 +129,13 @@ sub get_power_on {
     if (!$self->_smart_data) {
         $self->_read_data;
     }
-    
+
     my $ms = _c_get_power_on($self->_disk);
     if ($ms == -1) {
         confess "Failed to retrieve powered-on time: $!";
     }
     require Time::Seconds;
-    return Time::Seconds->new( $ms / 1000 ) ;
+    return Time::Seconds->new($ms / 1000);
 }
 
 sub self_test {

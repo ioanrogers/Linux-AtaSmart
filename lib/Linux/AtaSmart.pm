@@ -13,6 +13,14 @@ has device      => (is => 'ro', required => 1,);
 has _disk       => (is => 'rw', builder  => 1);
 has _smart_data => (is => 'rw', default  => 0);
 
+sub BUILDARGS {
+    my ( $class, @args ) = @_;
+
+    unshift @args, "device" if @args % 2 == 1;
+ 
+    return { @args };
+};
+
 sub _build__disk {
     my $self = shift;
     my $disk = _c_disk_open($self->device);

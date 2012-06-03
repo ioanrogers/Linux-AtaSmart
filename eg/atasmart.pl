@@ -15,7 +15,7 @@ say "Open [$disk_dev]";
 my $atasmart;
 
 try {
-    $atasmart = Linux::AtaSmart->new(device => $disk_dev);
+    $atasmart = Linux::AtaSmart->new($disk_dev);
 }
 catch {
     say "BOOM: $_";

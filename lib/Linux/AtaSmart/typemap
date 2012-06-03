@@ -1,4 +1,7 @@
 TYPEMAP
-SkBool         T_UV
-SkDisk *       T_PTR
-uint64_t       T_IV
+SkBool          T_UV
+SkDisk *        T_PTR
+SkSmartOverall  T_ENUM
+SkSmartSelfTest T_ENUM
+uint64_t        T_IV
+

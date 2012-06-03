@@ -6,6 +6,7 @@ use v5.14;
 use Moo;
 use File::Spec;
 use Carp;
+use Data::Printer;
 
 my $typemap;
 
@@ -105,6 +106,47 @@ sub get_bad {
         confess "Failed to retrieve bad sector count: $!";
     }
     return $bad_sectors;
+}
+
+sub get_overall {
+    my $self = shift;
+
+    my $overall = _c_get_overall($self->_disk);
+    if ($overall == -1) {
+        confess "Failed to retrieve overall SMART status: $!";
+    }
+    return $overall;
+}
+
+sub get_power_cycle {
+    my $self = shift;
+
+    my $cycles = _c_get_power_cycle($self->_disk);
+    if ($cycles == -1) {
+        confess "Failed to retrieve number of power cycles: $!";
+    }
+    return $cycles;
+}
+
+sub get_power_on {
+    my $self = shift;
+
+    my $ms = _c_get_power_on($self->_disk);
+    if ($ms == -1) {
+        confess "Failed to retrieve powered-on time: $!";
+    }
+    require Time::Seconds;
+    return Time::Seconds->new( $ms / 1000 ) ;
+}
+
+sub self_test {
+    my ($self, $test_type) = @_;
+
+    my $ret = _c_self_test($self->_disk, $test_type);
+    if ($ret == -1) {
+        confess "Failed to start $test_type self_test: $!";
+    }
+    return 1;
 }
 
 sub _read_data {
@@ -215,6 +257,34 @@ uint64_t _c_get_bad(SkDisk *disk) {
 	}
 }
 
+SkSmartOverall _c_get_overall(SkDisk *disk) {
+    SkSmartOverall *overall;
+    if (sk_disk_smart_get_overall(disk, &overall) < 0) {
+		return -1;
+	}
+	return overall;
+}
+
+uint64_t _c_get_power_cycle(SkDisk *disk) {
+    uint64_t count;
+    if (sk_disk_smart_get_power_cycle(disk, &count) < 0) {
+		return (uint64_t) -1;
+	}
+	return count;
+}
+
+uint64_t _c_get_power_on(SkDisk *disk) {
+    uint64_t ms;
+    if (sk_disk_smart_get_power_on(disk, &ms) < 0) {
+		return (uint64_t) -1;
+	}
+	return ms;
+}
+
+int _c_self_test(SkDisk *disk, SkSmartSelfTest test) {
+	return sk_disk_smart_self_test(disk, test);
+}
+
 /*
 const char* sk_smart_overall_to_string(SkSmartOverall overall);
 int sk_disk_identify_is_available(SkDisk *d, SkBool *available);
@@ -222,11 +292,6 @@ int sk_disk_identify_parse(SkDisk *d, const SkIdentifyParsedData **data);
 typedef void (*SkSmartAttributeParseCallback)(SkDisk *d, const SkSmartAttributeParsedData *a, void* userdata);
 int sk_disk_get_blob(SkDisk *d, const void **blob, size_t *size);
 int sk_disk_set_blob(SkDisk *d, const void *blob, size_t size);
-int sk_disk_smart_parse(SkDisk *d, const SkSmartParsedData **data);
 int sk_disk_smart_parse_attributes(SkDisk *d, SkSmartAttributeParseCallback cb, void* userdata);
-int sk_disk_smart_self_test(SkDisk *d, SkSmartSelfTest test);
-int sk_disk_smart_get_power_on(SkDisk *d, uint64_t *mseconds);
-int sk_disk_smart_get_power_cycle(SkDisk *d, uint64_t *count);
-int sk_disk_smart_get_overall(SkDisk *d, SkSmartOverall *overall);
 void sk_disk_free(SkDisk *d);
 */

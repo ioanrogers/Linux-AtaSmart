@@ -1,7 +1,10 @@
 #!/usr/bin/env perl
 
-use Modern::Perl '2012';
+use v5.14;
+use strict;
+use warnings;
 use Linux::AtaSmart;
+use Linux::AtaSmart::Constants qw/:all/;
 use Try::Tiny;
 use Number::Format qw/format_bytes/;
 
@@ -32,7 +35,21 @@ say "Bad Sectors: " . $atasmart->get_bad;
 
 say "Temperature °C: " . $atasmart->get_temperature;
 
+my $status = $atasmart->get_overall;
+
+if ($status != OVERALL_GOOD) {
+    say "STATUS NOT GOOD!"
+}
+
+say "Overall Status: " . $atasmart->get_overall;
+
+say "Power Cycles: " . $atasmart->get_power_cycle;
+
+say "Powered On: " . $atasmart->get_power_on->pretty;
+
+#say "Start short test";
+#$atasmart->self_test(TEST_SHORT);
+
 say "#### DUMP ####";
 $atasmart->dump;
 say "#### DUMP ####";
-

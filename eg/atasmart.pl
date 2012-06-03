@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+ #!/usr/bin/env perl
 
 use v5.14;
 use strict;
@@ -40,8 +40,6 @@ my $status = $atasmart->get_overall;
 if ($status != OVERALL_GOOD) {
     say "STATUS NOT GOOD!"
 }
-
-say "Overall Status: " . $atasmart->get_overall;
 
 say "Power Cycles: " . $atasmart->get_power_cycle;
 

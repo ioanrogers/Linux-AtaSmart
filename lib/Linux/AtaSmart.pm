@@ -19,7 +19,8 @@ sub _build__disk {
     if (!$disk) {
         confess "Failed to open disk: $!";
     }
-    $self->_disk($disk);
+    
+    return $disk;
 }
 
 sub smart_is_available {
@@ -97,6 +98,10 @@ sub get_bad {
 sub get_overall {
     my $self = shift;
 
+    if (!$self->_smart_data) {
+        $self->_read_data;
+    }
+
     my $overall = _c_get_overall($self->_disk);
     if ($overall == -1) {
         confess "Failed to retrieve overall SMART status: $!";
@@ -106,7 +111,11 @@ sub get_overall {
 
 sub get_power_cycle {
     my $self = shift;
-
+    
+    if (!$self->_smart_data) {
+        $self->_read_data;
+    }
+    
     my $cycles = _c_get_power_cycle($self->_disk);
     if ($cycles == -1) {
         confess "Failed to retrieve number of power cycles: $!";
@@ -117,6 +126,10 @@ sub get_power_cycle {
 sub get_power_on {
     my $self = shift;
 
+    if (!$self->_smart_data) {
+        $self->_read_data;
+    }
+    
     my $ms = _c_get_power_on($self->_disk);
     if ($ms == -1) {
         confess "Failed to retrieve powered-on time: $!";
@@ -146,7 +159,7 @@ sub _read_data {
         confess "Failed to parse SMART data: $!";
     }
 
-    $self->_smart_data(1);
+    $self->_smart_data = 1;
 
 }
 

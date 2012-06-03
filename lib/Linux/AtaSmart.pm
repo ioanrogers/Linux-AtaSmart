@@ -21,6 +21,10 @@ sub BUILDARGS {
     return { @args };
 };
 
+sub DEMOLISH {
+    _c_disk_free(shift->_disk);
+}
+
 sub _build__disk {
     my $self = shift;
     my $disk = _c_disk_open($self->device);

@@ -119,6 +119,10 @@ int _c_self_test(SkDisk *disk, SkSmartSelfTest test) {
 	return sk_disk_smart_self_test(disk, test);
 }
 
+void _c_disk_free(SkDisk *disk) {
+	return sk_disk_free(disk);
+}
+
 /*
 const char* sk_smart_overall_to_string(SkSmartOverall overall);
 int sk_disk_identify_is_available(SkDisk *d, SkBool *available);
@@ -127,7 +131,6 @@ typedef void (*SkSmartAttributeParseCallback)(SkDisk *d, const SkSmartAttributeP
 int sk_disk_get_blob(SkDisk *d, const void **blob, size_t *size);
 int sk_disk_set_blob(SkDisk *d, const void *blob, size_t size);
 int sk_disk_smart_parse_attributes(SkDisk *d, SkSmartAttributeParseCallback cb, void* userdata);
-void sk_disk_free(SkDisk *d);
 */
 MODULE = Linux::AtaSmart	PACKAGE = Linux::AtaSmart	
 
@@ -203,3 +206,6 @@ _c_self_test (disk, test)
 	SkDisk *	disk
 	SkSmartSelfTest	test
 
+void
+_c_disk_free (disk)
+	SkDisk *	disk

@@ -50,6 +50,6 @@ say "Powered On: " . $atasmart->get_power_on->pretty;
 #say "Start short test";
 #$atasmart->self_test(TEST_SHORT);
 
-say "#### DUMP ####";
-$atasmart->dump;
-say "#### DUMP ####";
+#say "#### DUMP ####";
+#$atasmart->dump;
+#say "#### DUMP ####";

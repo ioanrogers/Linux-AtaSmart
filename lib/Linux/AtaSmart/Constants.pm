@@ -39,3 +39,24 @@ push @{$EXPORT_TAGS{all}}, grep { !$seen{$_}++ } @{$EXPORT_TAGS{$_}}
 Exporter::export_ok_tags(qw/all status tests/);
 
 1;
+
+=head1 EXPORTS
+
+=over 
+
+=item :status
+
+Constants that correspond to the values returned by C<get_overall>
+
+=item :tests
+
+Constants for C<self_test>
+
+=item :all
+
+All of the above
+
+=back
+
+Check the source for the actual constant names.
+

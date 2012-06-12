@@ -1,6 +1,6 @@
 package My::Builder;
 
-use v5.14;
+use v5.10.1;
 use strict;
 use warnings;
 use base 'Module::Build';

@@ -2,7 +2,7 @@ package Linux::AtaSmart;
 
 # ABSTRACT: XS wrapper around libatasmart
 
-use v5.14;
+use v5.10.1;
 use Moo;
 use Carp;
 use XSLoader;
@@ -181,7 +181,7 @@ sub _read_data {
 
 =head1 SYNOPSIS
 
-  use v5.14;
+  use v5.10.1;
   use Linux::AtaSmart;
   use Linux::AtaSmart::Constants qw/:all/;
   

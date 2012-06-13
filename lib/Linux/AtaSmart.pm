@@ -171,7 +171,7 @@ sub _read_data {
         confess "Failed to parse SMART data: $!";
     }
 
-    $self->_smart_data = 1;
+    $self->_smart_data(1);
 
 }
 

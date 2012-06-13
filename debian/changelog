@@ -1,0 +1,5 @@
+liblinux-atasmart-perl (1.0.2) sid; urgency=low
+
+  * Initial release.
+
+ -- Ioan Rogers <ioan@cpan.org>  Wed, 13 Jun 2012 00:00:02 -0700

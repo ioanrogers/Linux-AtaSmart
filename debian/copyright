@@ -1,0 +1,9 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Linux-AtaSmart
+Upstream-Contact: Ioan Rogers <ioanr@cpan.org>
+Source: http://github.com/ioanrogers/Linux-AtaSmart
+
+Files: *
+Copyright: 2012 Ioan Rogers <ioanr@cpan.org>
+License: LGPL-3.0
+

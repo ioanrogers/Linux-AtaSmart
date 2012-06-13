@@ -1,0 +1,14 @@
+Source: liblinux-atasmart-perl
+Maintainer: Ioan Rogers <ioanr@cpan.org>
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 9), perl, libatasmart-dev, libmoo-perl, libtry-tiny-perl, libextutils-pkgconfig-perl
+Standards-Version: 3.9.3
+Homepage: https://metacpan.org/release/Linux-AtaSmart/
+
+Package: liblinux-atasmart-perl
+Architecture: any
+Depends: ${perl:Depends}, ${misc:Depends}, libmoo-perl, libatasmart4
+Description: Perl wrapper for libatasmart
+ OO wrapper around libatasmart
+

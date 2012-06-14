@@ -8,7 +8,7 @@ Homepage: https://metacpan.org/release/Linux-AtaSmart/
 
 Package: liblinux-atasmart-perl
 Architecture: any
-Depends: ${perl:Depends}, ${misc:Depends}, libmoo-perl, libatasmart4
+Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}, libmoo-perl, libatasmart4
 Description: Perl wrapper for libatasmart
  OO wrapper around libatasmart
 

@@ -7,8 +7,9 @@ use Test::More;
 if ($^O ne 'linux') {
     plan skip_all => 'Only usable on Linux.';
 } elsif ($> != 0 && !exists $ENV{ATASMART_NON_ROOT}) {
+
     # euid == 0 or set CAP_RAW_IO on the perl binary
-    plan skip_all => 'Need root to query SMART.'; 
+    plan skip_all => 'Need root to query SMART.';
 } elsif (!defined $ENV{ATASMART_DEVICE}) {
     plan skip_all => 'Set ATASMART_DEVICE=/dev/xxx for tests';
 } else {

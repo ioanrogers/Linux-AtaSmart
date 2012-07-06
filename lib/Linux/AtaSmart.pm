@@ -9,9 +9,9 @@ use XSLoader;
 
 XSLoader::load;
 
-has _device      => (is => 'ro', required => 1,);
+has _device     => (is => 'ro', required => 1,);
 has _disk       => (is => 'rw', builder  => 1);
-has _smart_data => (is => 'rw', default  => 0);
+has _smart_data => (is => 'rw', default  => sub {0});
 
 sub BUILDARGS {
     my ($class, @args) = @_;

@@ -1,0 +1,73 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.70.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+SHA1 5a636691814311c0af9325dae6849eebe14ce535 Build.PL
+SHA1 db07f83a7f216dde6880ecce3b45454b7ae9e7b2 Changes
+SHA1 b8ac60fabed0535d9191cd578b53c47d8da6d66d LICENSE
+SHA1 bbf8f45dacbc9d7ac143249eb2e41395ce92bbba MANIFEST
+SHA1 11d0817aa780d6482d3566c0a8b02a8758f5198c META.json
+SHA1 7e415e2ebe074833b805145b4864cfe20ebe1c27 README.mkdn
+SHA1 997e0d0eeadfa9ffa80977d2ff120dbe3f8114b3 debian/gbp.conf
+SHA1 c48e4cec568bc5eae32001929782db6aa367204f debian/liblinux-atasmart-perl.examples
+SHA1 f25f98d973b0c690e4967b0212b6425a48d95958 dist.ini
+SHA1 b85787514cbc217778355e1815e5c028ab164ec7 eg/atasmart.pl
+SHA1 834f1086bc640d6e63cae621cf81570b8aa39c2b inc/Devel/AssertOS.pm
+SHA1 ed6151739400c91fcd896070d9ff719abbb59704 inc/Devel/AssertOS/Linux.pm
+SHA1 3d38e8c3e58b463e625ae51e50fd0c7da07c3ffa inc/Devel/CheckOS.pm
+SHA1 3a3ae4b365de347cdf43ae58b360de6f123de14e inc/My/Builder.pm
+SHA1 a6fd76356d021fc3873e9316ab798866640dcbab lib/Linux/AtaSmart.pm
+SHA1 f3d795715fcbd2953731ddd2b5148e05d725f1d1 lib/Linux/AtaSmart.xs
+SHA1 4d4082a87f38d011267408ec7339fa84d33ec3f5 lib/Linux/AtaSmart/Constants.pm
+SHA1 3cbe905b92fbc69d59a06031d5ce6c837b352aa2 t/00-compile.t
+SHA1 11c72e6a1c365581b7be5a72ebe90537c544d7fd t/01-main.t
+SHA1 a4e98109b6ad4316b4f5fdd4cd6da9f6fff437af typemap
+SHA1 7e4d1c8bc515002ab83b969964b3e874b37b7908 weaver.ini
+SHA1 b0f2ac0b28f663d98de8369e26c2dc3fd3d4e52d xt/author/critic.t
+SHA1 6f846f7ede312098a614207bcea6fdb2207b8030 xt/author/test-eol.t
+SHA1 e3094e32340a9a0dcb90d91b77d66e61cbf7fa14 xt/perlcriticrc
+SHA1 98143fd89a26270feb9c17990090134e102b6a76 xt/perltidyrc
+SHA1 28ef20a73b7cf9b85585e2b7db6fc80424289134 xt/release/cpan-changes.t
+SHA1 cbc5b72710fb645c559b78c8ac8b879f62aff326 xt/release/dist-manifest.t
+SHA1 c6cd63148d20bda841ee21381cd6e9a62b7e6863 xt/release/kwalitee.t
+SHA1 7b52b909acf6cd52733f8f226f92147ed76a2717 xt/release/meta-json.t
+SHA1 bae663945a4380ca95a6ba5d8f5e42d2946e0629 xt/release/minimum-version.t
+SHA1 c6c3c9f7fe12058b4771449dff874b1c450c982c xt/release/mojibake.t
+SHA1 c769b078112da535475284c9fe0cf6b1c047dbdd xt/release/no-tabs.t
+SHA1 4c599e8a4ebb7a899f90ee3c235a64fdbc7e2c06 xt/release/pod-coverage.t
+SHA1 4146b75714ac972231d12d4fb93e764817a5eb0b xt/release/pod-linkcheck.t
+SHA1 fae7a9531fdd000d4075a378b828a7aa2508491d xt/release/pod-no404s.t
+SHA1 9934d36e45e1143c1a54658bc48872e0591af41b xt/release/pod-syntax.t
+SHA1 b767be32091c57bdfd5e07be64edcb82176774e5 xt/release/portability.t
+SHA1 7737dadb6441d9eaddc571caf03e6c114cd4a643 xt/release/synopsis.t
+SHA1 bbcd59d081d9940af5d43337ae85458075933829 xt/release/test-version.t
+SHA1 ec3f84bfd7a9ce3246e7592f4134100c6b5ce02b xt/release/unused-vars.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQIcBAEBCgAGBQJRHQbzAAoJEOpmRc2kYGBPgrMP/0w15yH4Fh3PH1Hb3eHXXVAy
+kp7/OJ2onI9ZUS9jtabZ7AuHn0s4LQw8rCA2rOvnbdBjlarH0//MeY+PLqSTP8cp
+W2Q5hc3LxOROghocjdDaYB4O8+pe6aQIJkG9v9LiT/SCsl0p0SXbkCwtX9I5SweL
+T/jFsc8/QmfEZVrb8cc6y5KmNPMljPeW27CCGxPRU6D2QWaO9qOueBdgGLA2eFw8
+C/OhYq1dbS/oSPT2kngT/HRiCfo3al3MiXyH6Ve6E3FjVG+AYXw9mJ1w+6n65Gh6
+FqnGEQPVzip+mszQ8s/EVwWb650bswS2fafUaJ8g+lm7zx6PNrtp7yUi6I7AdMC/
+N0nDu88hrWKqv6r9C2co1Zx1i+hObCUVDYy0kDsvpwVmjT7KBRUMg7RdzesCiaNT
+snt6MaMl1KCyh9+r2CDftyHxSs6/zcwWD1UFOEa2JKICrRcMd5zQnYv+NoPHKqpc
+l/525GmKKFmZ+jJCdpBSxPdqVnZmLlRzynpXQT35ErI9lsjNkVfimGCm9bC+TBJy
+avbXBTsifTZKktl7H/jElwhRxUw497Y3FExZhr/5ry762rKyrMY7T6cCxCzflZeA
+K2lo2OuR5qF+owQa7VjcOV+yhGq1qbpStM+Le/3Jj6zIzuPPTo4unY3esa3xpI0E
+um42q0H7lJ9IxtFt/mJ4
+=KtCV
+-----END PGP SIGNATURE-----

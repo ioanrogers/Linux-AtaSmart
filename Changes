@@ -1,0 +1,63 @@
+Changelog for Linux-AtaSmart
+
+1.0.4 2013-02-14T15:46:54
+ [Ioan Rogers <ioanr@cpan.org>]
+ - Moving debian packaging to branch
+
+
+v1.0.3 2012-07-06T09:01:43
+ [Ioan Rogers <ioanr@cpan.org>]
+ - Fixed incorrect default which only just manifested. Updated packaging
+
+ - Don't tidy on release, use @TestingMania
+
+ - lintian said to bump debhelper compat to 9 for hardening flags, and add
+   shlibs:Depends
+
+ - Only build on Linux
+
+
+v1.0.2 2012-06-13T08:09:16
+ [Ioan Rogers <ioanr@cpan.org>]
+ - Added debian packaging
+
+ - fixed non-lvalue subroutine call
+
+
+v1.0.1 2012-06-12T08:19:29
+ [Ioan Rogers <ioanr@cpan.org>]
+ - Drop minimum required perl version to match version distributed in
+   debian squeeze
+
+
+v1.0.0 2012-06-12T00:02:35
+ [Ioan Rogers <ioanr@cpan.org>]
+ - Release ready dist.ini
+
+ - Documented and added basic tests
+
+ - Freeing the disk struct. In theory
+
+ - Lifted BUILDARGS from Moo docs to allow for single arg constructor
+
+ - Tidied
+
+ - Fixed missing smart data checks
+
+ - Added configure deps and check for libatasmart-dev
+
+ - Used InlineX::C2XS to convert to XS, custom Module::Build wrapper to
+   link to libatasmart
+
+ - Wrapped self testing, power cycles, power on time, added constants for
+   some enums
+
+ - * Confess instead of die
+   * libatasmart is lgpl 2.1+, so changed to lgpl
+   * example program needs full path to dev, and dies without
+
+ - Only one version plugin
+
+ - Initial commit
+
+

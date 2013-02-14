@@ -1,4 +1,7 @@
 package Linux::AtaSmart;
+{
+  $Linux::AtaSmart::VERSION = '1.0.4';
+}
 
 # ABSTRACT: XS wrapper around libatasmart
 
@@ -177,7 +180,21 @@ sub _read_data {
 
 1;
 
-=for Pod::Coverage BUILDARGS DEMOLISH
+__END__
+
+=pod
+
+=encoding utf-8
+
+=for :stopwords Ioan Rogers github
+
+=head1 NAME
+
+Linux::AtaSmart - XS wrapper around libatasmart
+
+=head1 VERSION
+
+version 1.0.4
 
 =head1 SYNOPSIS
 
@@ -216,6 +233,8 @@ To read SMART info from a drive you will need to run as root, or have CAP_RAW_IO
 (which you will most likely have to set on your F<perl> binary).
 B<HAVING GROUP WRITE PERMISSIONS IS NOT ENOUGH!>
 
+=for Pod::Coverage BUILDARGS DEMOLISH
+
 =head1 ALTERNATIVES
 
 You may already have L<udisks|http://www.freedesktop.org/wiki/Software/udisks>
@@ -227,7 +246,7 @@ On Debian-like systems, make sure you have C<libatasmart-dev> installed.
 
 =head1 DIFFERENCES FROM THE C API
 
-=over 
+=over
 
 =item
 
@@ -309,9 +328,9 @@ Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
 
 =head1 SEE ALSO
 
-=over 
+=over
 
-=item 
+=item
 
 L<libatasmart|http://0pointer.de/blog/projects/being-smart.html>
 
@@ -320,3 +339,22 @@ L<libatasmart|http://0pointer.de/blog/projects/being-smart.html>
 L<Linux::AtaSmart::Constants>
 
 =back
+
+=head1 AUTHOR
+
+Ioan Rogers <ioanr@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2013 by Ioan Rogers.
+
+This is free software, licensed under:
+
+  The GNU Lesser General Public License, Version 3, June 2007
+
+=head1 BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org>.
+
+=cut

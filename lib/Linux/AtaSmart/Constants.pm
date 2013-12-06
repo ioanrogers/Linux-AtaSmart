@@ -1,4 +1,7 @@
 package Linux::AtaSmart::Constants;
+{
+  $Linux::AtaSmart::Constants::VERSION = '1.0.5';
+}
 
 # ABSTRACT: Constants for libatasmart
 
@@ -40,9 +43,25 @@ Exporter::export_ok_tags(qw/all status tests/);
 
 1;
 
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Ioan Rogers github
+
+=head1 NAME
+
+Linux::AtaSmart::Constants - Constants for libatasmart
+
+=head1 VERSION
+
+version 1.0.5
+
 =head1 EXPORTS
 
-=over 
+=over
 
 =item :status
 
@@ -60,3 +79,21 @@ All of the above
 
 Check the source for the actual constant names.
 
+=head1 AUTHOR
+
+Ioan Rogers <ioanr@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2013 by Ioan Rogers.
+
+This is free software, licensed under:
+
+  The GNU Lesser General Public License, Version 3, June 2007
+
+=head1 BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org>.
+
+=cut

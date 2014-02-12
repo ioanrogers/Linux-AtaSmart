@@ -1,5 +1,5 @@
 package Linux::AtaSmart;
-
+$Linux::AtaSmart::VERSION = '1.0.5';
 # ABSTRACT: XS wrapper around libatasmart
 
 use v5.10.1;
@@ -177,7 +177,21 @@ sub _read_data {
 
 1;
 
-=for Pod::Coverage BUILDARGS DEMOLISH
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Ioan Rogers
+
+=head1 NAME
+
+Linux::AtaSmart - XS wrapper around libatasmart
+
+=head1 VERSION
+
+version 1.0.5
 
 =head1 SYNOPSIS
 
@@ -216,6 +230,8 @@ To read SMART info from a drive you will need to run as root, or have CAP_RAW_IO
 (which you will most likely have to set on your F<perl> binary).
 B<HAVING GROUP WRITE PERMISSIONS IS NOT ENOUGH!>
 
+=for Pod::Coverage BUILDARGS DEMOLISH
+
 =head1 ALTERNATIVES
 
 You may already have L<udisks|http://www.freedesktop.org/wiki/Software/udisks>
@@ -227,7 +243,7 @@ On Debian-like systems, make sure you have C<libatasmart-dev> installed.
 
 =head1 DIFFERENCES FROM THE C API
 
-=over 
+=over
 
 =item
 
@@ -309,9 +325,9 @@ Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
 
 =head1 SEE ALSO
 
-=over 
+=over
 
-=item 
+=item
 
 L<libatasmart|http://0pointer.de/blog/projects/being-smart.html>
 
@@ -320,3 +336,58 @@ L<libatasmart|http://0pointer.de/blog/projects/being-smart.html>
 L<Linux::AtaSmart::Constants>
 
 =back
+
+=head1 BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at L<https://github.com/ioanrogers/Linux-AtaSmart/issues>.
+
+=head1 AVAILABILITY
+
+The project homepage is L<http://metacpan.org/release/Linux-AtaSmart/>.
+
+The latest version of this module is available from the Comprehensive Perl
+Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
+site near you, or see L<https://metacpan.org/module/Linux::AtaSmart/>.
+
+=head1 SOURCE
+
+The development version is on github at L<http://github.com/ioanrogers/Linux-AtaSmart>
+and may be cloned from L<git://github.com/ioanrogers/Linux-AtaSmart.git>
+
+=head1 AUTHOR
+
+Ioan Rogers <ioanr@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by Ioan Rogers.
+
+This is free software, licensed under:
+
+  The GNU Lesser General Public License, Version 3, June 2007
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+
+=cut

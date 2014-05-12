@@ -11,7 +11,7 @@ XSLoader::load;
 
 has _device     => (is => 'ro', required => 1,);
 has _disk       => (is => 'rw', builder  => 1);
-has _smart_data => (is => 'rw', default  => sub {0});
+has _smart_data => (is => 'rwp', predicate => 1);
 
 sub BUILDARGS {
     my ($class, @args) = @_;
@@ -24,6 +24,10 @@ sub BUILDARGS {
 sub DEMOLISH {
     _c_disk_free(shift->_disk);
 }
+
+before [qw/get_temperature get_bad get_overall get_power_cycle get_power_on/] => sub {
+    $_[0]->_read_data unless $_[0]->_has_smart_data;
+};
 
 sub _build__disk {
     my $self = shift;
@@ -79,10 +83,6 @@ sub smart_status {
 sub get_temperature {
     my $self = shift;
 
-    if (!$self->_smart_data) {
-        $self->_read_data;
-    }
-
     my $mkelvin = _c_get_temperature($self->_disk);
     if ($mkelvin == -1) {
         confess "Failed to retrieve temperature: $!";
@@ -96,10 +96,6 @@ sub get_temperature {
 sub get_bad {
     my $self = shift;
 
-    if (!$self->_smart_data) {
-        $self->_read_data;
-    }
-
     my $bad_sectors = _c_get_bad($self->_disk);
     if ($bad_sectors == -1) {
         confess "Failed to retrieve bad sector count: $!";
@@ -109,10 +105,6 @@ sub get_bad {
 
 sub get_overall {
     my $self = shift;
-
-    if (!$self->_smart_data) {
-        $self->_read_data;
-    }
 
     my $overall = _c_get_overall($self->_disk);
     if ($overall == -1) {
@@ -124,10 +116,6 @@ sub get_overall {
 sub get_power_cycle {
     my $self = shift;
 
-    if (!$self->_smart_data) {
-        $self->_read_data;
-    }
-
     my $cycles = _c_get_power_cycle($self->_disk);
     if ($cycles == -1) {
         confess "Failed to retrieve number of power cycles: $!";
@@ -137,10 +125,6 @@ sub get_power_cycle {
 
 sub get_power_on {
     my $self = shift;
-
-    if (!$self->_smart_data) {
-        $self->_read_data;
-    }
 
     my $ms = _c_get_power_on($self->_disk);
     if ($ms == -1) {
@@ -171,7 +155,7 @@ sub _read_data {
         confess "Failed to parse SMART data: $!";
     }
 
-    $self->_smart_data(1);
+    $self->_set__smart_data(1);
 
 }
 

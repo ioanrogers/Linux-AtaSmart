@@ -79,8 +79,9 @@ __smart_status(SkDisk *disk)
 uint64_t
 __get_temperature(SkDisk *disk)
     CODE:
-        if (sk_disk_smart_get_temperature(disk, &RETVAL) < 0)
-           croak("Failed to retrieve disk temperature: %s\n", strerror(errno));
+        if (sk_disk_smart_get_temperature(disk, &RETVAL) == -1 && errno != ENOENT) {
+            croak("Failed to retrieve disk temperature: %s\n", strerror(errno));
+        }
     OUTPUT:
         RETVAL
 

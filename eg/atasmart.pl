@@ -34,7 +34,7 @@ say 'Status: ' . ($atasmart->smart_status     ? 'GOOD' : 'BAD');
 
 say "Bad Sectors: " . $atasmart->get_bad;
 
-say "Temperature °C: " . $atasmart->get_temperature;
+say "Temperature °C: " . ($atasmart->get_temperature // "N/A");
 
 my $status = $atasmart->get_overall;
 

@@ -57,6 +57,7 @@ sub get_temperature {
     my $self = shift;
 
     my $mkelvin = __get_temperature($self->_disk);
+    return undef if $mkelvin == 0;
 
     # millikelvin to celsius
     my $celsius = ($mkelvin - 273150) / 1000;

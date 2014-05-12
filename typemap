@@ -1,5 +1,5 @@
 TYPEMAP
-SkBool          T_UV
+SkBool          T_BOOL
 SkDisk *        T_PTR
 SkSmartOverall  T_ENUM
 SkSmartSelfTest T_ENUM

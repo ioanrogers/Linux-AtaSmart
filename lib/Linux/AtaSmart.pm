@@ -11,7 +11,14 @@ use namespace::clean;
 XSLoader::load;
 
 has _device     => (is => 'ro', required => 1,);
-has _disk       => (is => 'rw', builder  => 1);
+
+has _disk       => (
+    is => 'ro',
+    default => sub {
+        __disk_open($_[0]->_device);
+    },
+);
+
 has _smart_data => (is => 'rwp', predicate => 1);
 
 sub BUILDARGS {
@@ -23,141 +30,55 @@ sub BUILDARGS {
 }
 
 sub DEMOLISH {
-    _c_disk_free(shift->_disk);
+    __disk_free($_[0]->_disk);
 }
 
 before [qw/get_temperature get_bad get_overall get_power_cycle get_power_on/] => sub {
-    $_[0]->_read_data unless $_[0]->_has_smart_data;
+    my $self = shift;
+    unless ($self->_has_smart_data) {
+        __get_smart_data($self->_disk);
+        $self->_set__smart_data(1);
+    }
 };
 
-sub _build__disk {
-    my $self = shift;
-    my $disk = _c_disk_open($self->_device);
-    if (!$disk) {
-        confess "Failed to open disk: $!";
-    }
+sub smart_is_available { __smart_is_available($_[0]->_disk) }
 
-    return $disk;
-}
+sub get_size { __get_size($_[0]->_disk) }
 
-sub smart_is_available {
-    my $self  = shift;
-    my $avail = _c_smart_is_available($self->_disk);
-    if ($avail == -1) {
-        confess "Failed to query whether SMART is available: $!";
-    }
-    return $avail;
-}
+sub check_sleep_mode { __check_sleep_mode($_[0]->_disk) }
 
-sub get_size {
-    my $self  = shift;
-    my $bytes = _c_get_size($self->_disk);
-    if ($bytes == -1) {
-        confess "Failed to retrieve disk size: $!";
-    }
-    return $bytes;
-}
+sub dump { __disk_dump($_[0]->_disk) }
 
-sub check_sleep_mode {
-    my $self  = shift;
-    my $awake = _c_check_sleep_mode($self->_disk);
-    if ($awake == -1) {
-        confess "Failed to check disk power status: $!";
-    }
-    return $awake;
-}
-
-sub dump {
-    my $self = shift;
-    _c_disk_dump($self->_disk);
-}
-
-sub smart_status {
-    my $self = shift;
-    my $good = _c_smart_status($self->_disk);
-    if ($good == -1) {
-        confess "Failed to query SMART status: $!";
-    }
-    return $good;
-}
+sub smart_status { __smart_status($_[0]->_disk) }
 
 sub get_temperature {
     my $self = shift;
 
-    my $mkelvin = _c_get_temperature($self->_disk);
-    if ($mkelvin == -1) {
-        confess "Failed to retrieve temperature: $!";
-    }
+    my $mkelvin = __get_temperature($self->_disk);
 
     # millikelvin to celsius
     my $celsius = ($mkelvin - 273150) / 1000;
     return $celsius;
 }
 
-sub get_bad {
-    my $self = shift;
+sub get_bad { __get_bad($_[0]->_disk) }
 
-    my $bad_sectors = _c_get_bad($self->_disk);
-    if ($bad_sectors == -1) {
-        confess "Failed to retrieve bad sector count: $!";
-    }
-    return $bad_sectors;
-}
+sub get_overall { __get_overall($_[0]->_disk) }
 
-sub get_overall {
-    my $self = shift;
-
-    my $overall = _c_get_overall($self->_disk);
-    if ($overall == -1) {
-        confess "Failed to retrieve overall SMART status: $!";
-    }
-    return $overall;
-}
-
-sub get_power_cycle {
-    my $self = shift;
-
-    my $cycles = _c_get_power_cycle($self->_disk);
-    if ($cycles == -1) {
-        confess "Failed to retrieve number of power cycles: $!";
-    }
-    return $cycles;
-}
+sub get_power_cycle { __get_power_cycle($_[0]->_disk) }
 
 sub get_power_on {
     my $self = shift;
 
-    my $ms = _c_get_power_on($self->_disk);
-    if ($ms == -1) {
-        confess "Failed to retrieve powered-on time: $!";
-    }
+    my $ms = __get_power_on($self->_disk);
+
     require Time::Seconds;
     return Time::Seconds->new($ms / 1000);
 }
 
 sub self_test {
     my ($self, $test_type) = @_;
-
-    my $ret = _c_self_test($self->_disk, $test_type);
-    if ($ret == -1) {
-        confess "Failed to start $test_type self_test: $!";
-    }
-    return 1;
-}
-
-sub _read_data {
-    my $self = shift;
-
-    if (_c_read_data($self->_disk) < 0) {
-        confess "Failed to read SMART data: $!";
-    }
-
-    if (_c_parse_data($self->_disk) < 0) {
-        confess "Failed to parse SMART data: $!";
-    }
-
-    $self->_set__smart_data(1);
-
+    _c_self_test($self->_disk, $test_type);
 }
 
 1;

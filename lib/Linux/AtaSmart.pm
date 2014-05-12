@@ -12,8 +12,8 @@ XSLoader::load;
 
 has _device     => (is => 'ro', required => 1,);
 
-has _disk       => (
-    is => 'ro',
+has _disk => (
+    is      => 'ro',
     default => sub {
         __disk_open($_[0]->_device);
     },
@@ -33,13 +33,15 @@ sub DEMOLISH {
     __disk_free($_[0]->_disk);
 }
 
-before [qw/get_temperature get_bad get_overall get_power_cycle get_power_on/] => sub {
+before [
+    qw/get_temperature get_bad get_overall get_power_cycle get_power_on/] =>
+  sub {
     my $self = shift;
     unless ($self->_has_smart_data) {
         __get_smart_data($self->_disk);
         $self->_set__smart_data(1);
     }
-};
+  };
 
 sub smart_is_available { __smart_is_available($_[0]->_disk) }
 
@@ -90,7 +92,7 @@ sub self_test {
   use v5.10.1;
   use Linux::AtaSmart;
   use Linux::AtaSmart::Constants qw/:all/;
-  
+
   my $atasmart = Linux::AtaSmart->new('/dev/sda');
 
   if (!$atasmart->smart_is_available) {
@@ -104,15 +106,15 @@ sub self_test {
   say 'Temperature °C: ' . $atasmart->get_temperature;
   say "Power Cycles: " . $atasmart->get_power_cycle;
   say "Powered On: " . $atasmart->get_power_on->pretty;
-  
+
   my $status = $atasmart->get_overall;
   if ($status != OVERALL_GOOD) {
       say "STATUS NOT GOOD!";
   }
-  
+
   # all of the above and more
   $atasmart->dump;
-  
+
   $atasmart->self_test(TEST_SHORT);
 
 =head1 DESCRIPTION
@@ -133,7 +135,7 @@ On Debian-like systems, make sure you have C<libatasmart-dev> installed.
 
 =head1 DIFFERENCES FROM THE C API
 
-=over 
+=over
 
 =item
 
@@ -164,7 +166,7 @@ All errors will throw exceptions via C<confess>
 =head2 C<new(disk_device)>
 
 Creates a new C<Linux::AtaSmart> object. Requires one argument, a string, identifying
-the disk to exmaine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME> 
+the disk to exmaine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
 
 =head2 C<smart_is_available>
 
@@ -206,7 +208,7 @@ Returns the disk capacity in bytes.
 
 =head2 C<get_temperature>
 
-Returns current disk temperature in celsius. 
+Returns current disk temperature in celsius.
 The C library actually uses millikelvins, complain if you'd prefer that.
 
 =head2 C<self_test(TEST_TYPE)>
@@ -215,9 +217,9 @@ Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
 
 =head1 SEE ALSO
 
-=over 
+=over
 
-=item 
+=item
 
 L<libatasmart|http://0pointer.de/blog/projects/being-smart.html>
 

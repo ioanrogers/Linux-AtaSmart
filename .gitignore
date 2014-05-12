@@ -1,6 +1,5 @@
-Linux-*
-.build
-liblinux-*
-_Inline
 *~
-
+.build
+Linux-*
+_Inline
+liblinux-*

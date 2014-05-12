@@ -6,6 +6,7 @@ use v5.10.1;
 use Moo;
 use Carp;
 use XSLoader;
+use namespace::clean;
 
 XSLoader::load;
 

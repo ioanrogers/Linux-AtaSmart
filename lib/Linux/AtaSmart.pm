@@ -43,16 +43,55 @@ before [
     }
   };
 
+=method C<new(disk_device)>
+
+Creates a new C<Linux::AtaSmart> object. Requires one argument, a string identifying
+the disk to examine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
+
+=method C<smart_is_available>
+
+Boolean.
+
+=cut
 sub smart_is_available { __smart_is_available($_[0]->_disk) }
 
+
+=method C<get_size>
+
+Returns the disk capacity in bytes.
+
+=cut
 sub get_size { __get_size($_[0]->_disk) }
 
+=method C<check_sleep_mode>
+
+Boolean, true if awake, false if sleeping. Reading SMART data will wake up the disk,
+so check this first if you care.
+
+=cut
 sub check_sleep_mode { __check_sleep_mode($_[0]->_disk) }
 
+=method C<dump>
+
+Prints all the available SMART info for the disk to F<STDOUT>.
+
+=cut
 sub dump { __disk_dump($_[0]->_disk) }
 
+=method C<smart_status>
+
+Boolean, true is GOOD, false is BAD.
+
+=cut
 sub smart_status { __smart_status($_[0]->_disk) }
 
+=method C<get_temperature>
+
+Returns current disk temperature in celsius, or C<undef> if not supported.
+
+The C library actually uses millikelvins, complain if you'd prefer that.
+
+=cut
 sub get_temperature {
     my $self = shift;
 
@@ -64,12 +103,34 @@ sub get_temperature {
     return $celsius;
 }
 
+=method C<get_bad>
+
+Returns the number of bad sectors on the disk.
+
+=cut
 sub get_bad { __get_bad($_[0]->_disk) }
 
+=method C<get_overall>
+
+Returns an integer corresponding to the overall status of the drive.
+See L<Linux::AtaSmart::Constants>.
+
+=cut
 sub get_overall { __get_overall($_[0]->_disk) }
 
+=method C<get_power_cycle>
+
+Returns number of times the disk has been power cycled.
+
+=cut
 sub get_power_cycle { __get_power_cycle($_[0]->_disk) }
 
+=method C<get_power_on>
+
+Returns the total time this disk has been powered-on as a L<Time::Seconds> object.
+The C library actually uses milliseconds, complain if you'd prefer that.
+
+=cut
 sub get_power_on {
     my $self = shift;
 
@@ -79,6 +140,11 @@ sub get_power_on {
     return Time::Seconds->new($ms / 1000);
 }
 
+=method C<self_test(TEST_TYPE)>
+
+Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
+
+=cut
 sub self_test {
     my ($self, $test_type) = @_;
     _c_self_test($self->_disk, $test_type);
@@ -132,7 +198,9 @@ installed, which you can query via L<Net::DBus>.
 
 =head1 INSTALLATION
 
-On Debian-like systems, make sure you have C<libatasmart-dev> installed.
+You will need your system's C<libatasmart> development package installed.
+On Debian-like systems, this is C<libatasmart-dev>. On Fedora it is
+C<libatasmart-devel>.
 
 =head1 DIFFERENCES FROM THE C API
 
@@ -140,7 +208,7 @@ On Debian-like systems, make sure you have C<libatasmart-dev> installed.
 
 =item
 
-I have removed the C<sk_disk_> and C<sk_disk_smart_> prefixes for brevity.
+Removed the C<sk_disk_> and C<sk_disk_smart_> prefixes for brevity.
 
 =item
 
@@ -160,61 +228,7 @@ This will be handled automatically by those methods that require it.
 
 =head1 ERRORS
 
-All errors will throw exceptions via C<confess>
-
-=head1 METHODS
-
-=head2 C<new(disk_device)>
-
-Creates a new C<Linux::AtaSmart> object. Requires one argument, a string, identifying
-the disk to exmaine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
-
-=head2 C<smart_is_available>
-
-Boolean.
-
-=head2 C<smart_status>
-
-Boolean, true is GOOD, false is BAD.
-
-=head2 C<check_sleep_mode>
-
-Boolean, true if awake, false if sleeping. Reading SMART data will wake up the disk,
-so check this first if you care.
-
-=head2 C<dump>
-
-Prints all the available SMART info for the disk to F<STDOUT>.
-
-=head2 C<get_bad>
-
-Returns the number of bad sectors on the disk.
-
-=head2 C<get_overall>
-
-Returns an integer corresponding to the overall status of the drive. See L<Linux::AtaSmart::Constants>.
-
-=head2 C<get_power_cycle>
-
-Returns number of times the disk has been power cycled.
-
-=head2 C<get_power_on>
-
-Returns the total time this disk has been powered-on as a L<Time::Seconds> object.
-The C library actually uses milliseconds, complain if you'd prefer that.
-
-=head2 C<get_size>
-
-Returns the disk capacity in bytes.
-
-=head2 C<get_temperature>
-
-Returns current disk temperature in celsius.
-The C library actually uses millikelvins, complain if you'd prefer that.
-
-=head2 C<self_test(TEST_TYPE)>
-
-Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
+All errors will throw exceptions via C<croak>
 
 =head1 SEE ALSO
 

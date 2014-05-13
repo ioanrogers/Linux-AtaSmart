@@ -13,17 +13,16 @@ if ($^O ne 'linux') {
 } elsif (!defined $ENV{ATASMART_DEVICE}) {
     plan skip_all => 'Set ATASMART_DEVICE=/dev/xxx for tests';
 } else {
-    plan tests => 11;
+    plan tests => 10;
 }
 
 use Linux::AtaSmart;
 
 my $disk_dev = $ENV{ATASMART_DEVICE};
 
-my $atasmart = new_ok('Linux::AtaSmart' => [$disk_dev],);
-ok(my $has_smart = $atasmart->smart_is_available, 'SMART is available');
+my $atasmart = new_ok('Linux::AtaSmart' => [$disk_dev]);
 SKIP: {
-    skip "SMART is NOT available for $disk_dev", 9 unless $has_smart;
+    skip "SMART is NOT available for $disk_dev", 9 unless $atasmart;
     ok($atasmart->get_size,         'retrieve disk size');
     ok($atasmart->check_sleep_mode, 'check sleep mode');
     ok($atasmart->smart_status,     'basic SMART status');

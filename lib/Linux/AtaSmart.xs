@@ -39,11 +39,17 @@ __get_smart_data(SkDisk *disk)
             croak("Failed to parse SMART data: %s\n", strerror(errno));
         }
 
-SkBool
+int
 __smart_is_available(SkDisk *disk)
     CODE:
-        if (sk_disk_smart_is_available(disk, &RETVAL) < 0)
-            croak("Failed to determine SMART availability: %s\n", strerror(errno));
+        SkBool available;
+        if (sk_disk_smart_is_available(disk, &available) < 0) {
+            if (errno == ENOTSUP)
+                croak("This device lacks SMART capability\n");
+            else
+                croak("Failed to determine SMART availability: %s\n", strerror(errno));
+        }
+        RETVAL = 1;
     OUTPUT:
         RETVAL
 

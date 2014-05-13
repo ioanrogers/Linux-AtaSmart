@@ -10,12 +10,14 @@ use namespace::clean;
 
 XSLoader::load;
 
-has _device     => (is => 'ro', required => 1,);
+has _device => (is => 'ro', required => 1,);
 
 has _disk => (
     is      => 'ro',
     default => sub {
-        __disk_open($_[0]->_device);
+        my $disk = __disk_open($_[0]->_device);
+        __smart_is_available($disk);
+        return $disk;
     },
 );
 
@@ -48,19 +50,14 @@ before [
 Creates a new C<Linux::AtaSmart> object. Requires one argument, a string identifying
 the disk to examine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
 
-=method C<smart_is_available>
-
-Boolean.
-
-=cut
-sub smart_is_available { __smart_is_available($_[0]->_disk) }
-
+Will C<croak> if there is any error, or the device does not support SMART.
 
 =method C<get_size>
 
 Returns the disk capacity in bytes.
 
 =cut
+
 sub get_size { __get_size($_[0]->_disk) }
 
 =method C<check_sleep_mode>
@@ -69,6 +66,7 @@ Boolean, true if awake, false if sleeping. Reading SMART data will wake up the d
 so check this first if you care.
 
 =cut
+
 sub check_sleep_mode { __check_sleep_mode($_[0]->_disk) }
 
 =method C<dump>
@@ -76,6 +74,7 @@ sub check_sleep_mode { __check_sleep_mode($_[0]->_disk) }
 Prints all the available SMART info for the disk to F<STDOUT>.
 
 =cut
+
 sub dump { __disk_dump($_[0]->_disk) }
 
 =method C<smart_status>
@@ -83,6 +82,7 @@ sub dump { __disk_dump($_[0]->_disk) }
 Boolean, true is GOOD, false is BAD.
 
 =cut
+
 sub smart_status { __smart_status($_[0]->_disk) }
 
 =method C<get_temperature>
@@ -92,6 +92,7 @@ Returns current disk temperature in celsius, or C<undef> if not supported.
 The C library actually uses millikelvins, complain if you'd prefer that.
 
 =cut
+
 sub get_temperature {
     my $self = shift;
 
@@ -108,6 +109,7 @@ sub get_temperature {
 Returns the number of bad sectors on the disk.
 
 =cut
+
 sub get_bad { __get_bad($_[0]->_disk) }
 
 =method C<get_overall>
@@ -116,6 +118,7 @@ Returns an integer corresponding to the overall status of the drive.
 See L<Linux::AtaSmart::Constants>.
 
 =cut
+
 sub get_overall { __get_overall($_[0]->_disk) }
 
 =method C<get_power_cycle>
@@ -123,6 +126,7 @@ sub get_overall { __get_overall($_[0]->_disk) }
 Returns number of times the disk has been power cycled.
 
 =cut
+
 sub get_power_cycle { __get_power_cycle($_[0]->_disk) }
 
 =method C<get_power_on>
@@ -131,6 +135,7 @@ Returns the total time this disk has been powered-on as a L<Time::Seconds> objec
 The C library actually uses milliseconds, complain if you'd prefer that.
 
 =cut
+
 sub get_power_on {
     my $self = shift;
 
@@ -145,6 +150,7 @@ sub get_power_on {
 Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
 
 =cut
+
 sub self_test {
     my ($self, $test_type) = @_;
     _c_self_test($self->_disk, $test_type);

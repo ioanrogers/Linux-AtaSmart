@@ -127,7 +127,7 @@ Returns number of times the disk has been power cycled.
 
 =cut
 
-sub get_power_cycle { __get_power_cycle($_[0]->_disk) }
+sub get_power_cycle { __get_power_cycle($_[0]->_disk) || undef }
 
 =method C<get_power_on>
 
@@ -140,6 +140,8 @@ sub get_power_on {
     my $self = shift;
 
     my $ms = __get_power_on($self->_disk);
+
+    return if $ms == 0;
 
     require Time::Seconds;
     return Time::Seconds->new($ms / 1000);
@@ -176,9 +178,9 @@ sub self_test {
   say 'Awake: ' .  ($atasmart->check_sleep_mode ? 'YES'  : 'NO');
   say 'Status: ' . ($atasmart->smart_status     ? 'GOOD' : 'BAD');
   say 'Bad Sectors: ' . $atasmart->get_bad;
-  say 'Temperature °C: ' . $atasmart->get_temperature;
-  say "Power Cycles: " . $atasmart->get_power_cycle;
-  say "Powered On: " . $atasmart->get_power_on->pretty;
+  say 'Temperature °C: ' . $atasmart->get_temperature // "n/a";
+  say "Power Cycles: " . $atasmart->get_power_cycle // "n/a";
+  say "Powered On: " . $atasmart->get_power_on->pretty // "n/a";
 
   my $status = $atasmart->get_overall;
   if ($status != OVERALL_GOOD) {

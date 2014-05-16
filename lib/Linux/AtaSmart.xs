@@ -110,7 +110,7 @@ __get_overall(SkDisk *disk)
 uint64_t
 __get_power_cycle(SkDisk *disk)
     CODE:
-        if (sk_disk_smart_get_power_cycle(disk, &RETVAL) < 0)
+        if (sk_disk_smart_get_power_cycle(disk, &RETVAL) < 0 && errno != ENOENT)
            croak("Failed to retrieve power cycle count: %s\n", strerror(errno));
     OUTPUT:
         RETVAL
@@ -118,7 +118,7 @@ __get_power_cycle(SkDisk *disk)
 uint64_t
 __get_power_on(SkDisk *disk)
     CODE:
-        if (sk_disk_smart_get_power_on(disk, &RETVAL) < 0)
+        if (sk_disk_smart_get_power_on(disk, &RETVAL) < 0 && errno != ENOENT)
             croak("Failed to retrieve power on ms: %s\n", strerror(errno));
     OUTPUT:
         RETVAL

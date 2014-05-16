@@ -1,0 +1,180 @@
+# NAME
+
+Linux::AtaSmart - XS wrapper around libatasmart
+
+# VERSION
+
+version 2.0.0
+
+# SYNOPSIS
+
+    use v5.10.1;
+    use Linux::AtaSmart;
+    use Linux::AtaSmart::Constants qw/:all/;
+
+    my $atasmart = Linux::AtaSmart->new('/dev/sda');
+
+    if (!$atasmart->smart_is_available) {
+        die "Drive not SMART capable";
+    }
+
+    say 'Disk size in bytes: ', $atasmart->get_size;
+    say 'Awake: ' .  ($atasmart->check_sleep_mode ? 'YES'  : 'NO');
+    say 'Status: ' . ($atasmart->smart_status     ? 'GOOD' : 'BAD');
+    say 'Bad Sectors: ' . $atasmart->get_bad;
+    say 'Temperature °C: ' . $atasmart->get_temperature // "n/a";
+    say "Power Cycles: " . $atasmart->get_power_cycle // "n/a";
+    say "Powered On: " . $atasmart->get_power_on->pretty // "n/a";
+
+    my $status = $atasmart->get_overall;
+    if ($status != OVERALL_GOOD) {
+        say "STATUS NOT GOOD!";
+    }
+
+    # all of the above and more
+    $atasmart->dump;
+
+    $atasmart->self_test(TEST_SHORT);
+
+# DESCRIPTION
+
+This is an XS wrapper around the Linux-only library, [libatasmart](http://0pointer.de/blog/projects/being-smart.html).
+To read SMART info from a drive you will need to run as root, or have CAP\_RAW\_IO
+(which you will most likely have to set on your `perl` binary).
+**HAVING GROUP WRITE PERMISSIONS IS NOT ENOUGH!**
+
+# METHODS
+
+## `new(disk_device)`
+
+Creates a new `Linux::AtaSmart` object. Requires one argument, a string identifying
+the disk to examine, e.g. `/dev/sda`, `/dev/disk/by-label/HOME`
+
+Will `croak` if there is any error, or the device does not support SMART.
+
+## `get_size`
+
+Returns the disk capacity in bytes.
+
+## `check_sleep_mode`
+
+Boolean, true if awake, false if sleeping. Reading SMART data will wake up the disk,
+so check this first if you care.
+
+## `dump`
+
+Prints all the available SMART info for the disk to `STDOUT`.
+
+## `smart_status`
+
+Boolean, true is GOOD, false is BAD.
+
+## `get_temperature`
+
+Returns current disk temperature in celsius, or `undef` if not supported.
+
+The C library actually uses millikelvins, complain if you'd prefer that.
+
+## `get_bad`
+
+Returns the number of bad sectors on the disk.
+
+## `get_overall`
+
+Returns an integer corresponding to the overall status of the drive.
+See [Linux::AtaSmart::Constants](https://metacpan.org/pod/Linux::AtaSmart::Constants).
+
+## `get_power_cycle`
+
+Returns number of times the disk has been power cycled.
+
+## `get_power_on`
+
+Returns the total time this disk has been powered-on as a [Time::Seconds](https://metacpan.org/pod/Time::Seconds) object.
+The C library actually uses milliseconds, complain if you'd prefer that.
+
+## `self_test(TEST_TYPE)`
+
+Starts a test of TEST\_TYPE. See [Linux::AtaSmart::Constants](https://metacpan.org/pod/Linux::AtaSmart::Constants).
+
+# ALTERNATIVES
+
+You may already have [udisks](http://www.freedesktop.org/wiki/Software/udisks)
+installed, which you can query via [Net::DBus](https://metacpan.org/pod/Net::DBus).
+
+# INSTALLATION
+
+You will need your system's `libatasmart` development package installed.
+On Debian-like systems, this is `libatasmart-dev`. On Fedora it is
+`libatasmart-devel`.
+
+# DIFFERENCES FROM THE C API
+
+- Removed the `sk_disk_` and `sk_disk_smart_` prefixes for brevity.
+- The `SkDisk` item is handled inside this module, you don't need to pass it to every method.
+You should create a new object to examine a different disk.
+- Results are returned directly by the methods, you don't have to pass references to be filled.
+- You don't have to manually call `sk_disk_smart_read_data` or `sk_disk_smart_parse_data`.
+This will be handled automatically by those methods that require it.
+
+# ERRORS
+
+All errors will throw exceptions via `croak`
+
+# SEE ALSO
+
+- [libatasmart](http://0pointer.de/blog/projects/being-smart.html)
+- [Linux::AtaSmart::Constants](https://metacpan.org/pod/Linux::AtaSmart::Constants)
+
+# BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at [https://github.com/ioanrogers/Linux-AtaSmart/issues](https://github.com/ioanrogers/Linux-AtaSmart/issues).
+
+# AVAILABILITY
+
+The project homepage is [http://metacpan.org/release/Linux-AtaSmart/](http://metacpan.org/release/Linux-AtaSmart/).
+
+The latest version of this module is available from the Comprehensive Perl
+Archive Network (CPAN). Visit [http://www.perl.com/CPAN/](http://www.perl.com/CPAN/) to find a CPAN
+site near you, or see [https://metacpan.org/module/Linux::AtaSmart/](https://metacpan.org/module/Linux::AtaSmart/).
+
+# SOURCE
+
+The development version is on github at [http://github.com/ioanrogers/Linux-AtaSmart](http://github.com/ioanrogers/Linux-AtaSmart)
+and may be cloned from [git://github.com/ioanrogers/Linux-AtaSmart.git](git://github.com/ioanrogers/Linux-AtaSmart.git)
+
+# AUTHOR
+
+Ioan Rogers <ioanr@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by Ioan Rogers.
+
+This is free software, licensed under:
+
+    The GNU Lesser General Public License, Version 3, June 2007
+
+# DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.

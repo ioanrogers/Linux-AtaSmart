@@ -1,16 +1,25 @@
 Changelog for Linux-AtaSmart
 
 2.0.0 2014-05-16T00:28:03Z
- - [API Changes] - Return undef if there's no temp, powered on or power
+ [API Changes]
+ 
+ - Return undef if there's no temp, powered on or power
    cycle attribute - Removed smart_is_available method, availability will
    be automatically checked on instantiation and an exception thrown if
    unavailable. There's nothing useful to do if SMART is not available
    anyway.
- - [Fixes] - Use unsigned int for uint64_t
- - [Other] - Reorganised and updated docs - Refactored XS having actually
-   read some XS docs  - Use namespace::clean - Use predicate for checking
-   if SMART data has been read, use before modifier to reduce repitition of
-   checks
+ 
+ [Fixes]
+ 
+ - Use unsigned int for uint64_t
+
+[Other]
+
+ - Reorganised and updated docs
+ - Refactored XS having actually read some XS docs
+ - Use namespace::clean
+ - Use predicate for checking if SMART data has been read, use before 
+   modifier to reduce repitition of checks
 
 1.0.3 2012-07-06T09:05:28Z
  - Fixed incorrect default.

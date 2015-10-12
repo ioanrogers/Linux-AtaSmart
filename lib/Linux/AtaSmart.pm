@@ -12,16 +12,13 @@ XSLoader::load;
 
 has _device => (is => 'ro', required => 1,);
 
-has _disk => (
-    is      => 'ro',
-    default => sub {
-        my $disk = __disk_open($_[0]->_device);
-        __smart_is_available($disk);
-        return $disk;
-    },
-);
-
 has _smart_data => (is => 'rwp', predicate => 1);
+
+sub BUILD {
+    __disk_open($_[0]->_device);
+    __smart_is_available();
+    return;
+}
 
 sub BUILDARGS {
     my ($class, @args) = @_;
@@ -31,131 +28,25 @@ sub BUILDARGS {
     return {@args};
 }
 
-sub DEMOLISH {
-    __disk_free($_[0]->_disk);
-}
-
 before [
     qw/get_temperature get_bad get_overall get_power_cycle get_power_on/] =>
   sub {
     my $self = shift;
     unless ($self->_has_smart_data) {
-        __get_smart_data($self->_disk);
+        __get_smart_data();
         $self->_set__smart_data(1);
     }
   };
 
-=method C<new(disk_device)>
-
-Creates a new C<Linux::AtaSmart> object. Requires one argument, a string identifying
-the disk to examine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
-
-Will C<croak> if there is any error, or the device does not support SMART.
-
-=method C<get_size>
-
-Returns the disk capacity in bytes.
-
-=cut
-
-sub get_size { __get_size($_[0]->_disk) }
-
-=method C<check_sleep_mode>
-
-Boolean, true if awake, false if sleeping. Reading SMART data will wake up the disk,
-so check this first if you care.
-
-=cut
-
-sub check_sleep_mode { __check_sleep_mode($_[0]->_disk) }
-
-=method C<dump>
-
-Prints all the available SMART info for the disk to F<STDOUT>.
-
-=cut
-
-sub dump { __disk_dump($_[0]->_disk) }
-
-=method C<smart_status>
-
-Boolean, true is GOOD, false is BAD.
-
-=cut
-
-sub smart_status { __smart_status($_[0]->_disk) }
-
-=method C<get_temperature>
-
-Returns current disk temperature in celsius, or C<undef> if not supported.
-
-The C library actually uses millikelvins, complain if you'd prefer that.
-
-=cut
-
-sub get_temperature {
-    my $self = shift;
-
-    my $mkelvin = __get_temperature($self->_disk);
-    return undef if $mkelvin == 0;
-
-    # millikelvin to celsius
-    my $celsius = ($mkelvin - 273150) / 1000;
-    return $celsius;
-}
-
-=method C<get_bad>
-
-Returns the number of bad sectors on the disk.
-
-=cut
-
-sub get_bad { __get_bad($_[0]->_disk) }
-
-=method C<get_overall>
-
-Returns an integer corresponding to the overall status of the drive.
-See L<Linux::AtaSmart::Constants>.
-
-=cut
-
-sub get_overall { __get_overall($_[0]->_disk) }
-
-=method C<get_power_cycle>
-
-Returns number of times the disk has been power cycled.
-
-=cut
-
-sub get_power_cycle { __get_power_cycle($_[0]->_disk) || undef }
-
-=method C<get_power_on>
-
-Returns the total time this disk has been powered-on as a L<Time::Seconds> object.
-The C library actually uses milliseconds, complain if you'd prefer that.
-
-=cut
-
 sub get_power_on {
     my $self = shift;
 
-    my $ms = __get_power_on($self->_disk);
+    my $ms = __get_power_on();
 
     return if $ms == 0;
 
     require Time::Seconds;
     return Time::Seconds->new($ms / 1000);
-}
-
-=method C<self_test(TEST_TYPE)>
-
-Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
-
-=cut
-
-sub self_test {
-    my ($self, $test_type) = @_;
-    _c_self_test($self->_disk, $test_type);
 }
 
 1;
@@ -198,6 +89,58 @@ This is an XS wrapper around the Linux-only library, L<libatasmart|http://0point
 To read SMART info from a drive you will need to run as root, or have CAP_RAW_IO
 (which you will most likely have to set on your F<perl> binary).
 B<HAVING GROUP WRITE PERMISSIONS IS NOT ENOUGH!>
+
+=method C<new(disk_device)>
+
+Creates a new C<Linux::AtaSmart> object. Requires one argument, a string identifying
+the disk to examine, e.g. F</dev/sda>, F</dev/disk/by-label/HOME>
+
+Will C<croak> if there is any error, or the device does not support SMART.
+
+=method C<get_size>
+
+Returns the disk capacity in bytes.
+
+=method C<check_sleep_mode>
+
+Boolean, true if awake, false if sleeping. Reading SMART data will wake up the disk,
+so check this first if you care.
+
+=method C<dump>
+
+Prints all the available SMART info for the disk to F<STDOUT>.
+
+=method C<smart_status>
+
+Boolean, true is GOOD, false is BAD.
+
+=method C<get_temperature>
+
+Returns current disk temperature in celsius, or C<undef> if not supported.
+
+The C library actually uses millikelvins, complain if you'd prefer that.
+
+=method C<get_bad>
+
+Returns the number of bad sectors on the disk.
+
+=method C<get_overall>
+
+Returns an integer corresponding to the overall status of the drive.
+See L<Linux::AtaSmart::Constants>.
+
+=method C<get_power_cycle>
+
+Returns number of times the disk has been power cycled.
+
+=method C<get_power_on>
+
+Returns the total time this disk has been powered-on as a L<Time::Seconds> object.
+The C library actually uses milliseconds, complain if you'd prefer that.
+
+=method C<self_test(TEST_TYPE)>
+
+Starts a test of TEST_TYPE. See L<Linux::AtaSmart::Constants>.
 
 =head1 ALTERNATIVES
 

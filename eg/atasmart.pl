@@ -32,11 +32,11 @@ try {
         say "STATUS NOT GOOD!";
     }
 
-    say "Power Cycles: " . ( $atasmart->get_power_cycle // "N/A" );
+    say "Power Cycles: " . ($atasmart->get_power_cycle // "N/A");
 
     my $powered_on = $atasmart->get_power_on;
 
-    say "Powered On: " . ( $powered_on ? $powered_on->pretty : "N/A" );
+    say "Powered On: " . ($powered_on ? $powered_on->pretty : "N/A");
 }
 catch {
     say "BOOM: $_";

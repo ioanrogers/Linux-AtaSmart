@@ -1,5 +1,9 @@
+*.c
+*.o
 *~
 .build
 Linux-*
 _Inline
+_build
+blib
 liblinux-*

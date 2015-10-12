@@ -4,4 +4,3 @@ SkDisk *        T_PTR
 SkSmartOverall  T_ENUM
 SkSmartSelfTest T_ENUM
 uint64_t        T_UV
-
